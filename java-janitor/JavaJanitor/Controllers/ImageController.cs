@@ -1,39 +1,71 @@
-﻿using System;
+﻿using JavaJanitor.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace JavaJanitor.Controllers
 {
     public class ImageController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        private static List<ImageDescriptor> Descriptors = new List<ImageDescriptor>();
+
+        [HttpGet]
+        [Route("images")]
+        public IEnumerable<ImageDescriptor> GetAllImageDescriptors()
         {
-            return new string[] { "value1", "value2" };
+            return Descriptors;
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        [HttpPost]
+        [Route("images")]
+        public HttpResponseMessage AddImageDescriptor([FromBody] ImageDescriptor descriptor)
         {
-            return "value";
+            IEnumerable<ImageDescriptor> matches = Descriptors.Where(e => e.Slug == descriptor.Slug);
+            if (matches.Count() == 0)
+            {
+                Descriptors.Add(descriptor);
+                return Request.CreateResponse(HttpStatusCode.Created);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        [HttpGet]
+        [Route("images/{slug}")]
+        [ResponseType(typeof(ImageDescriptor))]
+        public HttpResponseMessage GetImageDescriptor(string slug)
         {
+            IEnumerable<ImageDescriptor> matches = Descriptors.Where(e => e.Slug == slug);
+            if (matches.Count() == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, matches.First());
+            }
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        [HttpDelete]
+        [Route("images/{slug}")]
+        public HttpResponseMessage DeleteImageDescriptor(string slug)
         {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            IEnumerable<ImageDescriptor> matches = Descriptors.Where(e => e.Slug == slug);
+            if (matches.Count() == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else
+            {
+                Descriptors.Remove(matches.First());
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
         }
     }
 }
