@@ -11,7 +11,15 @@ namespace JavaJanitor.Controllers
 {
     public class CarafeStatusController : ApiController
     {
-        private List<CarafeStatus> Stats = new List<CarafeStatus>();
+        private static List<CarafeStatus> Stats = new List<CarafeStatus>();
+
+        public CarafeStatusController()
+        {
+            CarafeStatus stat = new CarafeStatus();
+            stat.Id = 1;
+            stat.Status = Status.Full;
+            Stats.Add(stat);
+        }
 
         // GET api/<controller>
         public IEnumerable<int> Get()

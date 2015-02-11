@@ -8,7 +8,6 @@ namespace JavaJanitor.Models
 {
     public enum Status { Empty, Full };
 
-    [JsonObject("carafe-status")]
     public class CarafeStatus
     {
         public int Id { get; set; }
