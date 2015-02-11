@@ -6,13 +6,12 @@ using System.Web;
 
 namespace JavaJanitor.Models
 {
-    public class ImageDescriptor
+    public class Image
     {
-        public String Slug { get; set; }
-        public int CarafeId { get; set; }
+        public Guid Guid { get; set; }
         public String Filename { get; set; }
 
         [JsonIgnore]
-        public byte[] image { get; set; }
+        public byte[] Bytes { get; set; }
     }
 }

@@ -11,37 +11,36 @@ namespace JavaJanitor.Controllers
 {
     public class ImageController : ApiController
     {
-        private static List<ImageDescriptor> Descriptors = new List<ImageDescriptor>();
+        private static List<Image> Images = new List<Image>();
 
         [HttpGet]
         [Route("images")]
-        public IEnumerable<ImageDescriptor> GetAllImageDescriptors()
+        public IEnumerable<Guid> GetAllImageGuids()
         {
-            return Descriptors;
+            return Images.Select(i => i.Guid);
         }
 
         [HttpPost]
         [Route("images")]
-        public HttpResponseMessage AddImageDescriptor([FromBody] ImageDescriptor descriptor)
+        public HttpResponseMessage AddImage([FromBody] byte[] bytes)
         {
-            IEnumerable<ImageDescriptor> matches = Descriptors.Where(e => e.Slug == descriptor.Slug);
-            if (matches.Count() == 0)
-            {
-                Descriptors.Add(descriptor);
-                return Request.CreateResponse(HttpStatusCode.Created);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
+            Image image = new Image();
+            image.Guid = System.Guid.NewGuid();
+            image.Bytes = bytes;
+            image.Filename = "azureblobstorage\"" + image.Guid + ".png";
+            Images.Add(image);
+
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+            response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/images/" + image.Guid);
+            return response;
         }
 
         [HttpGet]
-        [Route("images/{slug}")]
-        [ResponseType(typeof(ImageDescriptor))]
-        public HttpResponseMessage GetImageDescriptor(string slug)
+        [Route("images/{guid}")]
+        [ResponseType(typeof(Image))]
+        public HttpResponseMessage GetImage(Guid guid)
         {
-            IEnumerable<ImageDescriptor> matches = Descriptors.Where(e => e.Slug == slug);
+            IEnumerable<Image> matches = Images.Where(e => e.Guid == guid);
             if (matches.Count() == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
@@ -53,17 +52,17 @@ namespace JavaJanitor.Controllers
         }
 
         [HttpDelete]
-        [Route("images/{slug}")]
-        public HttpResponseMessage DeleteImageDescriptor(string slug)
+        [Route("images/{guid}")]
+        public HttpResponseMessage DeleteImage(Guid guid)
         {
-            IEnumerable<ImageDescriptor> matches = Descriptors.Where(e => e.Slug == slug);
+            IEnumerable<Image> matches = Images.Where(e => e.Guid == guid);
             if (matches.Count() == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             else
             {
-                Descriptors.Remove(matches.First());
+                Images.Remove(matches.First());
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
         }
