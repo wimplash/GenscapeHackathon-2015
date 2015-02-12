@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using JavaJanitor.Models;
 using System.Web.Http.Description;
+using Microsoft.AspNet.SignalR;
 
 namespace JavaJanitor.Controllers
 {
@@ -28,6 +29,9 @@ namespace JavaJanitor.Controllers
 
             Carafe carafe = new Carafe(id);
             Carafes.Add(carafe);
+
+            var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
+            context.Clients.All.showNewCarafe(id);
 
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
             response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/carafes/" + carafe.Id);
@@ -61,7 +65,12 @@ namespace JavaJanitor.Controllers
             }
             else
             {
-                Carafes.Remove(matches.First());
+                Carafe carafe = matches.First();
+                Carafes.Remove(carafe);
+
+                var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
+                context.Clients.All.removeCarafe(id);
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
         }
@@ -93,8 +102,13 @@ namespace JavaJanitor.Controllers
             }
             else
             {
-                matches.First().Status = ev.State;
-                matches.First().Events.Add(ev);
+                Carafe carafe = matches.First();
+                carafe.Status = ev.State;
+                carafe.Events.Add(ev);
+
+                var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
+                context.Clients.All.sendCarafeState(carafe.Id, ev.State);
+
                 return Request.CreateResponse(HttpStatusCode.Created);
             }
         }
@@ -126,7 +140,12 @@ namespace JavaJanitor.Controllers
             }
             else
             {
-                matches.First().Images.Add(guid);
+                Carafe carafe = matches.First();
+                carafe.Images.Add(guid);
+
+                var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
+                context.Clients.All.sendShame(carafe.Id, guid);
+
                 return Request.CreateResponse(HttpStatusCode.Created);
             }
         }
