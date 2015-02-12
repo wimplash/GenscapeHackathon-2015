@@ -22,6 +22,7 @@ namespace JavaJanitor.Models
 
         public Carafe()
         {
+            LastUpdated = DateTime.Now;
             Status = Status.Empty;
             Events = new List<CarafeEvent>();
             Images = new List<Guid>();

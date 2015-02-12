@@ -12,7 +12,7 @@ namespace JavaJanitor.Controllers
 {
     public class CarafeController : ApiController
     {
-        private static Carafe Carafe = new Carafe();
+        public static Carafe Carafe = new Carafe();
 
         [HttpGet]
         [Route("carafe")]

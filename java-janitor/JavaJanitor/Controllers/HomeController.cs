@@ -10,8 +10,9 @@ namespace JavaJanitor.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-
+            ViewBag.Title = "Genscape's Virtual Terry Tate";
+            ViewBag.CarafeState = CarafeController.Carafe.Status;
+            ViewBag.CarafeLastUpdated = CarafeController.Carafe.LastUpdated;
             return View();
         }
     }

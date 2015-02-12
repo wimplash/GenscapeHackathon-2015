@@ -1,24 +1,39 @@
 ﻿<div class="jumbotron">
-    <h1>WHERE'S THE JOE!?</h1>
-    <p class="lead">Genscape believes in a well-caffin</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Virtual Terry Tate</h1>
+    <p class="lead">Genscape believes in a well-caffinated work-force.</p>
+    <p>In order to ensure that all of our employees have access to a consistent source of coffee, we've decided to implement this virtual version of our very own cofee enforcer, Terry Tate.</p>
 </div>
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+    <div class="col-md-12 @ViewBag.CarafeState">
+        <h2>@ViewBag.CarafeState</h2>
+        <dl class="dl-horizontal">
+            <dt>Last Updated:</dt>
+            <dd>@ViewBag.CarafeLastUpdated</dd>
+        </dl>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Wall Of Shame</h2>
+        <p>Here'a a list of images containing the people who didn't fill the pot back up after emptying it out.</p>
+    </div>
+</div>
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var tateHub = $.connection.tateHub;
+
+            tateHub.client.sendCarafeState = function (status) {
+
+            };
+
+            tateHub.client.sendShame = function (imageGuid) {
+
+            };
+
+            $.connection.hub.start().done(function () { });
+        });
+    </script>
+}
