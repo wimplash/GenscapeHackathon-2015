@@ -11,22 +11,21 @@ namespace JavaJanitor.Models
 
     public class Carafe
     {
-        public int Id { get; set; }
-
         [JsonConverter(typeof(StringEnumConverter))]        
         public Status Status { get; set; }
 
-        [JsonIgnore]
         public List<CarafeEvent> Events { get; set; }
 
         public List<Guid> Images { get; set; }
-  
-        public Carafe(int id)
+
+        public DateTime LastUpdated { get; set; }
+
+        public Carafe()
         {
-            Id = id;
             Status = Status.Empty;
             Events = new List<CarafeEvent>();
             Images = new List<Guid>();
         }
+
     }
 }
