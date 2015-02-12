@@ -19,15 +19,14 @@ namespace JavaJanitor.Models
         [JsonIgnore]
         public List<CarafeEvent> Events { get; set; }
 
-        [JsonIgnore]
-        public List<Image> Images { get; set; }
+        public List<Guid> Images { get; set; }
   
         public Carafe(int id)
         {
             Id = id;
             Status = Status.Empty;
             Events = new List<CarafeEvent>();
-            Images = new List<Image>();
+            Images = new List<Guid>();
         }
     }
 }

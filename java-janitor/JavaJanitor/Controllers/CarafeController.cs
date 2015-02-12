@@ -26,8 +26,7 @@ namespace JavaJanitor.Controllers
         {
             int id = (Carafes.Max(c => (int?) c.Id) ?? 0) + 1;
 
-            Carafe carafe = new Carafe();
-            carafe.Id = id;
+            Carafe carafe = new Carafe(id);
             Carafes.Add(carafe);
 
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
@@ -96,6 +95,38 @@ namespace JavaJanitor.Controllers
             {
                 matches.First().Status = ev.State;
                 matches.First().Events.Add(ev);
+                return Request.CreateResponse(HttpStatusCode.Created);
+            }
+        }
+
+        [HttpGet]
+        [Route("carafes/{id}/images")]
+        [ResponseType(typeof(IEnumerable<Guid>))]
+        public HttpResponseMessage GetCarafeImages(int id)
+        {
+            IEnumerable<Carafe> matches = Carafes.Where(e => e.Id == id);
+            if (matches.Count() == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, matches.First().Images);
+            }
+        }
+
+        [HttpPost]
+        [Route("carafes/{id}/images")]
+        public HttpResponseMessage AddCarafeImage(int id, [FromBody] Guid guid)
+        {
+            IEnumerable<Carafe> matches = Carafes.Where(e => e.Id == id);
+            if (matches.Count() == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else
+            {
+                matches.First().Images.Add(guid);
                 return Request.CreateResponse(HttpStatusCode.Created);
             }
         }
