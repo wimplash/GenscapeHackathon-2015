@@ -1,4 +1,7 @@
 ﻿using JavaJanitor.Models;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +30,18 @@ namespace JavaJanitor.Controllers
             Image image = new Image();
             image.Guid = System.Guid.NewGuid();
             image.Bytes = bytes;
-            image.Filename = "azureblobstorage\"" + image.Guid + ".png";
+            image.Filename = image.Guid + ".jpg";
             Images.Add(image);
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("BlobStorageConnectionString"));
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("terry-tates-brain");
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.Guid + ".jpg");
+            using (var stream = new System.IO.MemoryStream(bytes))
+            {
+                blockBlob.UploadFromStream(stream);
+            }
 
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
             response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/images/" + image.Guid);

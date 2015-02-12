@@ -4,18 +4,22 @@
     <p>In order to ensure that all of our employees have access to a consistent source of coffee, we've decided to implement this virtual version of our very own cofee enforcer, Terry Tate.</p>
 </div>
 <div class="row">
-    <div class="col-md-12 @ViewBag.CarafeState">
-        <h2>@ViewBag.CarafeState</h2>
+    <div class="carafe col-md-12 @ViewBag.CarafeState">
+        <h2 class="carafe-state">@ViewBag.CarafeState</h2>
         <dl class="dl-horizontal">
             <dt>Last Updated:</dt>
-            <dd>@ViewBag.CarafeLastUpdated</dd>
+            <dd class="carafe-last-updated">@ViewBag.CarafeLastUpdated</dd>
         </dl>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <h2>Wall Of Shame</h2>
-        <p>Here'a a list of images containing the people who didn't fill the pot back up after emptying it out.</p>
+        <a href="#" class="thumbnail">
+            <figure>
+                <img src="..." alt="...">
+                <figcaption></figcaption>
+            </figure>
+        </a>
     </div>
 </div>
 @section scripts {
@@ -26,7 +30,8 @@
             var tateHub = $.connection.tateHub;
 
             tateHub.client.sendCarafeState = function (status) {
-
+                $('.carafe').removeClass('Empty Full').addClass(status);
+                $('.carafe-state').empty().text(status);
             };
 
             tateHub.client.sendShame = function (imageGuid) {
