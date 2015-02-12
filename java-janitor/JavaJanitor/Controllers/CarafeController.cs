@@ -15,25 +15,24 @@ namespace JavaJanitor.Controllers
 
         [HttpGet]
         [Route("carafes")]
-        public IEnumerable<Carafe> GetAllCarafes()
+        public IEnumerable<int> GetAllCarafeIds()
         {
-            return Carafes;
+            return Carafes.Select(c => c.Id);
         }
 
         [HttpPost]
         [Route("carafes")]
-        public HttpResponseMessage AddCarafe([FromBody] Carafe carafe)
+        public HttpResponseMessage AddCarafe()
         {
-            IEnumerable<Carafe> matches = Carafes.Where(e => e.Id == carafe.Id);
-            if (matches.Count() == 0)
-            {
-                Carafes.Add(carafe);
-                return Request.CreateResponse(HttpStatusCode.Created);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
+            int id = (Carafes.Max(c => (int?) c.Id) ?? 0) + 1;
+
+            Carafe carafe = new Carafe();
+            carafe.Id = id;
+            Carafes.Add(carafe);
+
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+            response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/carafes/" + carafe.Id);
+            return response;
         }
 
         [HttpGet]
