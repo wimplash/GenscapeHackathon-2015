@@ -1,17 +1,18 @@
 ﻿<div class="row container-fluid">
     <div class="carafe col-md-4 @ViewBag.CarafeState">
-        <h2 class="carafe-state">@ViewBag.CarafeState</h2>
+        <h2 style="font-size:200%;">Coffee Status:</h2>
         <dl class="dl-horizontal">
+            <dt style="font-size:200%;">Status:</dt>
+            <dd class="carafe-state" style="font-size:200%;font-weight:bold;">@ViewBag.CarafeState</dd>
             <dt>Last Updated:</dt>
             <dd class="carafe-last-updated">@ViewBag.CarafeLastUpdated</dd>
         </dl>
     </div>
     <div class="col-md-8 wall-of-shame">
-        <h2>Wall of Shame</h2>
         <a href="#" class="thumbnail">
             <figure>
                 <img class="offender-image" src="https://vterrytatestorage.blob.core.windows.net/terry-tates-brain/blobname">
-                <figcaption><span class="offense-time">@ViewBag.OffenderLastUpdated</span>--<span class="offender-name">@ViewBag.OffenderName</span></figcaption>
+                <figcaption><span class="offender-name">@ViewBag.OffenderName</span>--<span class="offense-time">@ViewBag.OffenderLastUpdated</span></figcaption>
             </figure>
         </a>
     </div>
