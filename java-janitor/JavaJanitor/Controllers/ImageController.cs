@@ -40,17 +40,12 @@ namespace JavaJanitor.Controllers
             image.Filename = guid + ".jpg";
             Images.Add(image);
 
-            System.Drawing.Image i = System.Drawing.Image.FromStream(new MemoryStream(input), false, true);
-
-            MemoryStream output = new MemoryStream();
-            i.Save(output, ImageFormat.Jpeg);
-
             string setting = CloudConfigurationManager.GetSetting("BlobStorageConnectionString") ?? ConfigurationManager.ConnectionStrings["BlobStorageConnectionString"].ConnectionString;
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(setting);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("terry-tates-brain");
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(guid + ".jpg");
-            await blockBlob.UploadFromStreamAsync(output);
+            await blockBlob.UploadFromByteArrayAsync(input, 0, input.Length);
             blockBlob.Properties.ContentType = "image/jpg";
             blockBlob.SetProperties();
 
