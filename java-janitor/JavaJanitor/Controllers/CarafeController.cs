@@ -55,8 +55,8 @@ namespace JavaJanitor.Controllers
         }
 
         [HttpPost]
-        [Route("carafe/offender/image")]
-        public HttpResponseMessage AddOffenderImage([FromBody] string imageUrl)
+        [Route("carafe/offender/image/{url}")]
+        public HttpResponseMessage AddOffenderImage(string url)
         {
             DateTime now = DateTime.Now;
             Image image = new Image();
@@ -80,8 +80,8 @@ namespace JavaJanitor.Controllers
         }
 
         [HttpPost]
-        [Route("carafe/offender/name")]
-        public HttpResponseMessage SetOffenderName([FromBody] string name)
+        [Route("carafe/offender/name/{name}")]
+        public HttpResponseMessage SetOffenderName(string name)
         {
             Carafe.Name = name;
             Carafe.LastUpdated = DateTime.Now;
