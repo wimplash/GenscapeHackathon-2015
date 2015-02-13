@@ -31,14 +31,17 @@ namespace JavaJanitor.Controllers
 
         [HttpPost]
         [Route("carafe/events")]
-        public HttpResponseMessage AddCarafeEvent([FromBody] CarafeEvent ev)
+        public HttpResponseMessage AddCarafeEvent([FromBody] CarafeState state)
         {
-            Carafe.Status = ev.State;
+            Carafe.Status = state.Status;
+            CarafeEvent ev = new CarafeEvent();
+            ev.State = state.Status;
+            ev.Timestamp = DateTime.Now;
+            Carafe.LastUpdated = ev.Timestamp;
             Carafe.Events.Add(ev);
-            Carafe.LastUpdated = DateTime.Now;
 
             var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
-            context.Clients.All.sendCarafeState(ev.State);
+            context.Clients.All.sendCarafeState(state.Status.ToString(), ev.Timestamp);
 
             return Request.CreateResponse(HttpStatusCode.Created);
         }

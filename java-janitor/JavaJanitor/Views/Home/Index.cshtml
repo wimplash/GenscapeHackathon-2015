@@ -29,7 +29,7 @@
         $(function () {
             var tateHub = $.connection.tateHub;
 
-            tateHub.client.sendCarafeState = function (status) {
+            tateHub.client.sendCarafeState = function (status, timestamp) {
                 $('.carafe').removeClass('Empty Full').addClass(status);
                 $('.carafe-state').empty().text(status);
             };
