@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace JavaJanitor.Controllers
 {
-    public class DailyAnalyticsController : ApiController
+    public class DailyAnalyticsController : Controller
     {
         public ActionResult Index()
         {
