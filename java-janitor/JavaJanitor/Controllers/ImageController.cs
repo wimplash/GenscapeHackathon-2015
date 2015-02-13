@@ -18,9 +18,9 @@ namespace JavaJanitor.Controllers
 
         [HttpGet]
         [Route("images")]
-        public IEnumerable<Guid> GetAllImageGuids()
+        public IEnumerable<ImageGuid> GetAllImageGuids()
         {
-            return Images.Select(i => i.Guid);
+            return Images.Select(i => new ImageGuid(i.Guid));
         }
 
         [HttpPost]
@@ -28,23 +28,24 @@ namespace JavaJanitor.Controllers
         public HttpResponseMessage AddImage([FromBody] byte[] bytes)
         {
             Image image = new Image();
-            image.Guid = System.Guid.NewGuid();
+            Guid guid = System.Guid.NewGuid();
+            image.Guid = guid;
             image.Bytes = bytes;
-            image.Filename = image.Guid + ".jpg";
+            image.Filename = guid + ".jpg";
             Images.Add(image);
 
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
                 CloudConfigurationManager.GetSetting("BlobStorageConnectionString"));
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("terry-tates-brain");
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(image.Guid + ".jpg");
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(guid + ".jpg");
             using (var stream = new System.IO.MemoryStream(bytes))
             {
                 blockBlob.UploadFromStream(stream);
             }
 
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
-            response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/images/" + image.Guid);
+            response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/images/" + guid);
             return response;
         }
 

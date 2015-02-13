@@ -48,7 +48,7 @@ namespace JavaJanitor.Controllers
 
         [HttpGet]
         [Route("carafe/images")]
-        [ResponseType(typeof(IEnumerable<Guid>))]
+        [ResponseType(typeof(IEnumerable<ImageGuid>))]
         public HttpResponseMessage GetCarafeImageGuids()
         {
             return Request.CreateResponse(HttpStatusCode.OK, Carafe.Images);
@@ -56,13 +56,13 @@ namespace JavaJanitor.Controllers
 
         [HttpPost]
         [Route("carafe/images")]
-        public HttpResponseMessage AddCarafeImageGuid([FromBody] Guid guid)
+        public HttpResponseMessage AddCarafeImageGuid([FromBody] ImageGuid imageGuid)
         {
-            Carafe.Images.Add(guid);
+            Carafe.Images.Add(imageGuid.Guid);
             Carafe.LastUpdated = DateTime.Now;
 
             var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
-            context.Clients.All.sendShame(guid);
+            context.Clients.All.sendShame(imageGuid.Guid);
 
             return Request.CreateResponse(HttpStatusCode.Created);
         }
