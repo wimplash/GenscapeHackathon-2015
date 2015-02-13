@@ -71,8 +71,9 @@ my $Daily = [
 ];
 
 ajax "/chart_data/daily/:day" => sub {
+    my $tot = 0; $tot += $_ for @$Daily;
     my $data = [[
-        map [ timegm(0, 0, $_, 12, 1, 2015) * 1000, $Daily->[$_] ],
+        map [ timegm(0, 0, $_, 12, 1, 2015) * 1000, $Daily->[$_] / $tot * 100 ],
             0 .. $#$Daily
     ]];
     to_json($data)

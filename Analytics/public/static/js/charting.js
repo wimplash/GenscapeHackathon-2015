@@ -53,6 +53,7 @@ function chart(type, mid, title, ylabel, uid) {
                     renderer: $.jqplot.DateAxisRenderer,
                     // tickInterval: 600000,
                     // tickOptions:{ formatString: "%b %#d, %y %T" },
+                    tickOptions:{ formatString: uid == "daily" ? "%H:%M" : "%b" },
                 },
                 yaxis: {
                     // label:         ylabel,
