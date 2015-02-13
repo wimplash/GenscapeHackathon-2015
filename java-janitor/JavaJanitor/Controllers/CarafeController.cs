@@ -47,23 +47,47 @@ namespace JavaJanitor.Controllers
         }
 
         [HttpGet]
-        [Route("carafe/images")]
-        [ResponseType(typeof(IEnumerable<ImageGuid>))]
-        public HttpResponseMessage GetCarafeImageGuids()
+        [Route("carafe/offender/image")]
+        [ResponseType(typeof(Image))]
+        public HttpResponseMessage GetOffenderImage()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, Carafe.Images);
+            return Request.CreateResponse(HttpStatusCode.OK, Carafe.Image);
         }
 
         [HttpPost]
-        [Route("carafe/images")]
-        public HttpResponseMessage AddCarafeImageGuid([FromBody] ImageGuid imageGuid)
+        [Route("carafe/offender/image")]
+        public HttpResponseMessage AddOffenderImage([FromBody] string imageUrl)
         {
-            Carafe.Images.Add(imageGuid.Guid);
+            DateTime now = DateTime.Now;
+            Image image = new Image();
+            image.Filename = imageUrl;
+            image.Timestamp = now;
+            Carafe.Image = image;
+            Carafe.LastUpdated = now;
+
+            var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
+            context.Clients.All.setOffenderImage(image);
+
+            return Request.CreateResponse(HttpStatusCode.Created);
+        }
+
+        [HttpGet]
+        [Route("carafe/offender/name")]
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage GetOffenderName()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, Carafe.Name);
+        }
+
+        [HttpPost]
+        [Route("carafe/offender/name")]
+        public HttpResponseMessage SetOffenderName([FromBody] string name)
+        {
+            Carafe.Name = name;
             Carafe.LastUpdated = DateTime.Now;
 
             var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
-            string name = "Max Stoler";
-            context.Clients.All.sendShame(name, imageGuid.Guid);
+            context.Clients.All.setOffenderName(name);
 
             return Request.CreateResponse(HttpStatusCode.Created);
         }

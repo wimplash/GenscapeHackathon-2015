@@ -8,7 +8,7 @@ namespace JavaJanitor.Models
 {
     public class Image
     {
-        public Guid Guid { get; set; }
+        public DateTime Timestamp { get; set; }
         public String Filename { get; set; }
     }
 }

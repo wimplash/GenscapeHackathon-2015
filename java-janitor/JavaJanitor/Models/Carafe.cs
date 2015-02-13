@@ -16,7 +16,8 @@ namespace JavaJanitor.Models
 
         public List<CarafeEvent> Events { get; set; }
 
-        public List<Guid> Images { get; set; }
+        public Image Image { get; set; }
+        public string Name { get; set; }
 
         public DateTime LastUpdated { get; set; }
 
@@ -25,7 +26,6 @@ namespace JavaJanitor.Models
             LastUpdated = DateTime.Now;
             Status = Status.Empty;
             Events = new List<CarafeEvent>();
-            Images = new List<Guid>();
         }
 
     }
