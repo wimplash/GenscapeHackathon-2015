@@ -12,7 +12,14 @@
         <a href="#" class="thumbnail">
             <figure>
                 <img class="offender-image" src="https://vterrytatestorage.blob.core.windows.net/terry-tates-brain/blobname">
-                <figcaption><span class="offender-name">@ViewBag.OffenderName</span>--<span class="offense-time">@ViewBag.OffenderLastUpdated</span></figcaption>
+                <figcaption>
+                    <dl class="dl-horizontal">
+                        <dt>Last Offender:</dt>
+                        <dd class="offender-name">@ViewBag.OffenderName</dd>
+                        <dt>At:</dt>
+                        <dd class="offense-time">@ViewBag.OffenderLastUpdated</dd>
+                    </dl>
+                </figcaption>
             </figure>
         </a>
     </div>
