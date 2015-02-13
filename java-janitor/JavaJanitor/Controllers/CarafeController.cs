@@ -60,7 +60,7 @@ namespace JavaJanitor.Controllers
         {
             DateTime now = DateTime.Now;
             Image image = new Image();
-            image.Filename = imageUrl;
+            image.Filename = url;
             image.Timestamp = now;
             Carafe.Image = image;
             Carafe.LastUpdated = now;
