@@ -46,7 +46,7 @@ function chart(type, mid, title, ylabel, uid) {
                 return ret;
             },
             axesDefaults: {
-                pad: 1.2,
+                pad: 1.05,
             },
             axes: {
                 xaxis: {
@@ -55,7 +55,7 @@ function chart(type, mid, title, ylabel, uid) {
                     // tickOptions:{ formatString: "%b %#d, %y %T" },
                 },
                 yaxis: {
-                    label:         ylabel,
+                    // label:         ylabel,
                     labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
                 }
             },
