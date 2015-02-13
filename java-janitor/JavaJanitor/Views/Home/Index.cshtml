@@ -4,7 +4,7 @@
     <p>In order to ensure that all of our employees have access to a consistent source of coffee, we've decided to implement this virtual version of our very own cofee enforcer, Terry Tate.</p>
 </div>
 <div class="row">
-    <div class="carafe col-md-12 @ViewBag.CarafeState">
+    <div class="carafe col-md-8 @ViewBag.CarafeState">
         <h2 class="carafe-state">@ViewBag.CarafeState</h2>
         <dl class="dl-horizontal">
             <dt>Last Updated:</dt>
@@ -13,29 +13,32 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 wall-of-shame">
+    <div class="col-md-8 wall-of-shame">
         <h2>Wall of Shame</h2>
         <a href="#" class="thumbnail">
             <figure>
-                <img class="offender-image" src="@ViewBag.OffenderImage">
+                <img class="offender-image" src="https://vterrytatestorage.blob.core.windows.net/terry-tates-brain/blobname">
                 <figcaption><span class="offense-time">@ViewBag.OffenderLastUpdated</span>--<span class="offender-name">@ViewBag.OffenderName</span></figcaption>
             </figure>
         </a>
     </div>
 </div>
-<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/virtualterry" data-widget-id="566142051994312704">Tweets by @@virtualterry</a>
-<script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
+<div class="row">
+    <div class="col-md-4 wall-of-shame">
+        <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/virtualterry" data-widget-id="566142051994312704">Tweets by @@virtualterry</a>
+        <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
+    </div>
+</div>
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script src="~/signalr/hubs"></script>
-   <script>
+    <script>
         $(function () {
             var tateHub = $.connection.tateHub;
 
-            tateHub.client.setOffenderImage = function (image) {
-                $('.wall-of-shame .thumbnail .offender-image').attr('src', image.filename);
-                $('.wall-of-shame .thumbnail .offense-time').text(image.lastUpdated);
-            };
+            setInterval(function () {
+                $('.wall-of-shame .thumbnail .offender-image').attr('src', 'https://vterrytatestorage.blob.core.windows.net/terry-tates-brain/blobname');
+            }, 5000);
             tateHub.client.setOffenderName = function (name) {
                 $('.wall-of-shame .thumbnail .offender-name').text(name);
             };
