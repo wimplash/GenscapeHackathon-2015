@@ -1,9 +1,8 @@
 <div id="page">
   <div id="an1" style="height:400px;width:800px; "></div>
-    <!-- chart("chart", mid, measure, unit, uid) } -->
     <script class="code" language="javascript" type="text/javascript">
       $(function() {
-        chart("an", 1, 29, "Fillups", "pots");
+        chart("an", 1, 29, "Fillups", "monthly");
       });
     </script>
   </div>

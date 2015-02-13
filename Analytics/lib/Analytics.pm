@@ -9,8 +9,12 @@ get '/' => sub {
     template 'index';
 };
 
-get '/analytics' => sub {
-    template 'analytics';
+get '/monthly' => sub {
+    template 'monthly';
+};
+
+get '/daily' => sub {
+    template 'daily';
 };
 
 my $Monthly = [
@@ -28,13 +32,7 @@ my $Monthly = [
   [ 322, 24, 13.4, "Max"    ],
 ];
 
-ajax "/chart_data/:user_id/:measure_id" => sub {
-    # no_cache;
-    # debug "Returning chart data from [" . params->{user_id} . "]["
-                                        # . params->{measure_id} . "]";
-    # my $data = AM::User->chart_data(params->{user_id}, params->{measure_id});
-    # my $data = [[ 10, 10, 1, "abc", 10, "ABC" ]];
-    my $data = [[[ 10, 20 ], [ 20, 15 ], [ 30, 25 ]]];
+ajax "/chart_data/monthly/:year" => sub {
     my $data = [[
         map [ timegm(0, 0, 0, 1, $_, 2014) * 1000, $Monthly->[$_][2] ],
             0 .. $#$Monthly
@@ -42,10 +40,41 @@ ajax "/chart_data/:user_id/:measure_id" => sub {
         # map [ timegm(0, 0, 0, 1, $_, 2014) * 1000, $Monthly->[$_][0] ],
             # 0 .. $#$Monthly
     ]];
-    # Don't use Data::Dumper to print out $data - it will turn some numbers
-    # into strings which to_json will quote and which will make jqplot unhappy.
-    # Data::Printer is OK.
-    # debug p $data;
+    to_json($data)
+};
+
+my $Daily = [
+    0,
+    0,
+    0,
+    0,
+    0,
+    42,
+    1083,
+    833,
+    708,
+    583,
+    167,
+    167,
+    208,
+    167,
+    42,
+    83,
+    42,
+    42,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+];
+
+ajax "/chart_data/daily/:day" => sub {
+    my $data = [[
+        map [ timegm(0, 0, $_, 12, 1, 2015) * 1000, $Daily->[$_] ],
+            0 .. $#$Daily
+    ]];
     to_json($data)
 };
 
