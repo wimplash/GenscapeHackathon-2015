@@ -11,6 +11,17 @@
 <script type="text/javascript">/* <![CDATA[ */
     !window.jQuery && document.write('<script type="text/javascript" src="[% request.uri_base %]/javascripts/jquery.min.js"><\/script>')
 /* ]]> */</script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/jquery.jqplot.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.json2.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.highlighter.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.cursor.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.canvasTextRenderer.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.trendline.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/jqplot/plugins/jqplot.dragable.min.js"></script>
+<script language="javascript" type="text/javascript" src="[% request.uri_base %]/static/js/charting.js"></script>
+
 
 </head>
 <body>
