@@ -13,20 +13,18 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <a href="#" class="thumbnail">
-            <figure>
-                <img src="..." alt="...">
-                <figcaption></figcaption>
-            </figure>
-        </a>
+    <div class="col-md-12 wall-of-shame">
+        <h2>Wall of Shame</h2>
     </div>
 </div>
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/handlebars.runtime-v3.0.0.js"></script>
     <script>
         $(function () {
+            var source = $('#thumbnail-template').html();
+            var thumbnailTemplate = Handlebars.compile(source);
             var tateHub = $.connection.tateHub;
 
             tateHub.client.sendCarafeState = function (status, timestamp) {
@@ -34,11 +32,19 @@
                 $('.carafe-state').empty().text(status);
             };
 
-            tateHub.client.sendShame = function (imageGuid) {
-
+            tateHub.client.sendShame = function (name, imageGuid) {
+                $('.wall-of-shame').find('h2').after(thumbnailTemplate({name: name, guid: imageGuid}));
             };
 
             $.connection.hub.start().done(function () { });
         });
+    </script>
+    <script id="thumbnail-template" type="text/x-handlebars-template">
+        <a href="#" class="thumbnail">
+            <figure>
+                <img src="http://genscape-java-janitor.azurewebsites.net/images/{{guid}}">
+                <figcaption>{{name}}</figcaption>
+            </figure>
+        </a>
     </script>
 }

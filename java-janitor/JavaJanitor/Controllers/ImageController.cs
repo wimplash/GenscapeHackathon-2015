@@ -4,9 +4,14 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -25,24 +30,29 @@ namespace JavaJanitor.Controllers
 
         [HttpPost]
         [Route("images")]
-        public HttpResponseMessage AddImage([FromBody] byte[] bytes)
+        public async Task<HttpResponseMessage> AddImage()
         {
+            byte[] input = await Request.Content.ReadAsByteArrayAsync();
+
             Image image = new Image();
             Guid guid = System.Guid.NewGuid();
             image.Guid = guid;
-            image.Bytes = bytes;
             image.Filename = guid + ".jpg";
             Images.Add(image);
 
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
-                CloudConfigurationManager.GetSetting("BlobStorageConnectionString"));
+            System.Drawing.Image i = System.Drawing.Image.FromStream(new MemoryStream(input), false, true);
+
+            MemoryStream output = new MemoryStream();
+            i.Save(output, ImageFormat.Jpeg);
+
+            string setting = CloudConfigurationManager.GetSetting("BlobStorageConnectionString") ?? ConfigurationManager.ConnectionStrings["BlobStorageConnectionString"].ConnectionString;
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(setting);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("terry-tates-brain");
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(guid + ".jpg");
-            using (var stream = new System.IO.MemoryStream(bytes))
-            {
-                blockBlob.UploadFromStream(stream);
-            }
+            await blockBlob.UploadFromStreamAsync(output);
+            blockBlob.Properties.ContentType = "image/jpg";
+            blockBlob.SetProperties();
 
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
             response.Headers.Add("Location", "http://genscape-java-janitor.azurewebsites.net/images/" + guid);
@@ -51,8 +61,7 @@ namespace JavaJanitor.Controllers
 
         [HttpGet]
         [Route("images/{guid}")]
-        [ResponseType(typeof(Image))]
-        public HttpResponseMessage GetImage(Guid guid)
+        public async Task<HttpResponseMessage> GetImage(Guid guid)
         {
             IEnumerable<Image> matches = Images.Where(e => e.Guid == guid);
             if (matches.Count() == 0)
@@ -61,7 +70,18 @@ namespace JavaJanitor.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.OK, matches.First());
+                string setting = CloudConfigurationManager.GetSetting("BlobStorageConnectionString") ?? ConfigurationManager.ConnectionStrings["BlobStorageConnectionString"].ConnectionString;
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(setting);
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = blobClient.GetContainerReference("terry-tates-brain");
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(guid + ".jpg");
+
+                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                MemoryStream output = new MemoryStream();
+                await blockBlob.DownloadToStreamAsync(output);
+                result.Content = new StreamContent(output);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
+                return result;
             }
         }
 

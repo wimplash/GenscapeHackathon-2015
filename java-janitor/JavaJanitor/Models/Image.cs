@@ -10,8 +10,5 @@ namespace JavaJanitor.Models
     {
         public Guid Guid { get; set; }
         public String Filename { get; set; }
-
-        [JsonIgnore]
-        public byte[] Bytes { get; set; }
     }
 }

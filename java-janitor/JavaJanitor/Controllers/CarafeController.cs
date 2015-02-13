@@ -62,7 +62,8 @@ namespace JavaJanitor.Controllers
             Carafe.LastUpdated = DateTime.Now;
 
             var context = GlobalHost.ConnectionManager.GetHubContext<TateHub>();
-            context.Clients.All.sendShame(imageGuid.Guid);
+            string name = "Max Stoler";
+            context.Clients.All.sendShame(name, imageGuid.Guid);
 
             return Request.CreateResponse(HttpStatusCode.Created);
         }
