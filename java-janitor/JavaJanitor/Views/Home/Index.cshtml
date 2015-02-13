@@ -23,6 +23,7 @@
         </a>
     </div>
 </div>
+<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/virtualterry" data-widget-id="566142051994312704">Tweets by @virtualterry</a>
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script src="~/signalr/hubs"></script>
@@ -45,4 +46,5 @@
             $.connection.hub.start().done(function () { });
         });
     </script>
+<script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
 }
