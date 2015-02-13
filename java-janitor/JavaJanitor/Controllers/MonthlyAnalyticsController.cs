@@ -9,5 +9,9 @@ namespace JavaJanitor.Controllers
 {
     public class MonthlyAnalyticsController : ApiController
     {
+        public ActionResult Index()
+        {
+            return View();
+        }
     }
 }
