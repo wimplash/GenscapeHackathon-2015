@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace JavaJanitor.Controllers
 {
-    public class AnalyticsController : ApiController
+    public class MonthlyAnalyticsController : ApiController
     {
     }
 }
